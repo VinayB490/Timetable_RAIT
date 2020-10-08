@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<?php
+session_start();
+$conn=mysqli_connect("localhost","root","","timetable")or die("connection not established");
+$tbsem = $_SESSION['tbsemtp'];
+echo $tbsem;
+ $tbclass=$_SESSION['tbclass'] ;
+ echo $tbclass;
+ $tbdept=$_SESSION['tbdept'];
+ echo $tbdept;
+ $tbdiv=$_SESSION['tbdiv'] ;
+ echo $tbdiv;
+  $tbroom=$_SESSION['tbroom'];
+ echo $tbroom;
+  $tbstart=$_SESSION['tbstart'];
+  echo $tbstart;
+?>
+<html>
+<head>
+	<title>eg</title>  
+	<script src="js/jquery.js">
+		</script>   
+</head>
+<body>
+<center><script type="text/javascript">
+	function sub(x){
+		console.log(x);
+		tbtype=$('#'+x+' #tbtype').val();
+		console.log(tbtype+'\n');
+
+
+		$('#'+x+' #tbcourse').prop("disabled",false);
+		$('#'+x+' #tbtname').prop("disabled",false);
+		$('#'+x+' #tbdesc').prop("disabled",false);
+
+
+	if(tbtype=="Theory")
+	{ 
+	 	$.ajax('pqr.php')
+			.done(function(response){
+			$('#'+x+' #tbcourse').empty();
+			$('#'+x+' #tbtname').empty();
+			$('#'+x+' #tbcourse').append(response);
+			console.log(response)
+			})
+			.fail(function(request,errorType,errorMessage){
+			alert(errorMessage);
+			console.log(errorType);
+			})
+	}
+	else if(tbtype=="Lab")
+	{
+	 	$.ajax('pqrlab.php')
+			.done(function(response){
+			$('#'+x+' #tbcourse').empty();
+			$('#'+x+' #tbtname').empty();
+			$('#'+x+' #tbcourse').append(response);
+			console.log(response)
+			})
+			.fail(function(request,errorType,errorMessage){
+			alert(errorMessage);
+			console.log(errorType);
+			})
+	}
+	else{
+		// document.getElementById('#mon1 #tbcourse').disabled=true;
+		$('#'+x+' #tbcourse').empty();
+		$('#'+x+' #tbcourse').prop("disabled",true);
+		$('#'+x+' #tbtname').empty();
+		$('#'+x+' #tbtname').prop("disabled",true);
+		$('#'+x+' #tbdesc').empty();
+		$('#'+x+' #tbdesc').prop("disabled",true);
+	}
+
+	}
+	function fac(x) {
+		
+		console.log(x);
+
+			$('#'+x+' #tbtname').prop("disabled",false);
+		console.log($('#'+x+' #tbcourse').val());
+		var tbcid=$('#'+x+' #tbcourse option:selected').attr('id');
+		console.log(tbcid);
+				$.ajax('abc.php')
+			.done(function(response){
+			$('#'+x+' #tbtname').empty();
+			$('#'+x+' #tbtname').append(response);
+			console.log(response);
+			
+			$('#'+x+' #tbtname option[id='+tbcid+']').attr('selected','selected');
+			$('#'+x+' #tbtname').prop("disabled",true);
+			})
+			.fail(function(request,errorType,errorMessage){
+			alert(errorMessage);
+			console.log(errorType);
+			})
+	}
+</script>
+	<form name="tb" method="post" action="">
+		<table id="tbdetails">
+		<tr><td>SEM. :</td><td><input type="label" name="tbsem" id="tbsem" value="<?php echo $tbsem;?>" disabled> </td></tr>
+		<tr><td colspan="2"></td></tr>
+		<tr><td>DEPT. :</td><td><input type="label" name="tbdept" id="tbdept" value="<?php echo $tbdept;?>" disabled> </td></tr>
+		<tr><td colspan="2"></td></tr>
+		<tr><td>CLASS :</td><td><input type="label" name="tbclass" id="tbclass" value="<?php echo $tbclass;?>" disabled> </td></tr>
+		<tr><td colspan="2"></td></tr>
+		<tr><td>DIV. :</td><td><input type="label" name="tbdiv" id="tbdiv" value="<?php echo $tbdiv;?>" disabled> </td></tr>
+		<tr><td colspan="2"></td></tr>
+		<tr><td>ROOM No. :</td><td><input type="label" name="tbroom" id="tbroom" value="<?php echo $tbroom;?>" disabled> </td></tr>
+		<tr><td colspan="2"></td></tr>
+		<tr><td>START TIME :</td><td><input type="label" name="tbstart" id="tbstart" value="<?php echo $tbstart;?>" disabled> </td></tr>
+		<tr><td colspan="2"></td></tr>
+	</table>
+	<!-- </form> -->
+<br><br>
+<table border="2" id="tblec" bordercolor="red">
+<tr>
+	<td>day\<br>time</td>
+	<td>1</td>
+	<td>2</td>
+
+	<td>3</td>
+	<td>4</td>
+	<td>5</td>
+
+	<td>6</td>
+	<td>7</td>
+	<td>8</td>
+	
+</tr>	
+<tr>
+	<td>Mon</td>
+	<td  id="mon1">
+		<!-- <form name="fmon1"> -->
+	<table bgcolor="yellow"><tr><td>
+	Lec. type:</td><td  >
+	<select name="tbtype" id="tbtype" onchange="sub('mon1')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('mon1')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+		</td>
+
+	<td  id="mon2">
+	<!-- <form name="fmon2"> -->
+	<table bgcolor="lightgreen"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('mon2')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('mon2')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+		</td>
+	<td  id="mon3">
+	<!-- <form name="fmon2"> -->
+	<table bgcolor="lightblue"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('mon3')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('mon3')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	
+	<td  id="mon4">
+	<!-- <form name="fmon2"> -->
+	<table bgcolor="violet"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('mon4')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('mon4')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="mon5">
+	<!-- <form name="fmon2"> -->
+	<table bgcolor="red"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('mon5')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('mon5')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="mon6">
+	<!-- <form name="fmon2"> -->
+	<table bgcolor="orange"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('mon6')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('mon6')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	
+	</td>
+	<td  id="mon7">
+	<!-- <form name="fmon2"> -->
+	<table bgcolor="yellow"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('mon7')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('mon7')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="mon8">
+	<!-- <form name="fmon2"> -->
+	<table bgcolor="lightgreen"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('mon8')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('mon8')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	
+</tr>
+<tr>
+	<td>Tue</td>
+	<td  id="tue1">
+		<!-- <form name="ftue1"> -->
+	<table bgcolor="lightblue"><tr><td>
+	Lec. type:</td><td  >
+	<select name="tbtype" id="tbtype" onchange="sub('tue1')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('tue1')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+		</td>
+
+	<td  id="tue2">
+	<!-- <form name="ftue2"> -->
+	<table bgcolor="violet"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('tue2')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('tue2')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+		</td>
+	<td  id="tue3">
+	<!-- <form name="ftue2"> -->
+	<table bgcolor="red"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('tue3')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('tue3')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	
+	<td  id="tue4">
+	<!-- <form name="ftue2"> -->
+	<table bgcolor="orange"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('tue4')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('tue4')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="tue5">
+	<!-- <form name="ftue2"> -->
+	<table bgcolor="yellow"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('tue5')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('tue5')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="tue6">
+	<!-- <form name="ftue2"> -->
+	<table bgcolor="lightgreen"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('tue6')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('tue6')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	
+	</td>
+	<td  id="tue7">
+	<!-- <form name="ftue2"> -->
+	<table bgcolor="lightblue"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('tue7')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('tue7')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="tue8">
+	<!-- <form name="ftue2"> -->
+	<table bgcolor="violet"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('tue8')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('tue8')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+</tr>
+<tr>
+	<td>Wed</td>
+	<td  id="wed1">
+		<!-- <form name="fwed1"> -->
+	<table bgcolor="red"><tr><td>
+	Lec. type:</td><td  >
+	<select name="tbtype" id="tbtype" onchange="sub('wed1')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('wed1')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+		</td>
+
+	<td  id="wed2">
+	<!-- <form name="fwed2"> -->
+	<table bgcolor="orange"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('wed2')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('wed2')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+		</td>
+	<td  id="wed3">
+	<!-- <form name="fwed2"> -->
+	<table bgcolor="yellow"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('wed3')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('wed3')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	
+	<td  id="wed4">
+	<!-- <form name="fwed2"> -->
+	<table bgcolor="lightgreen"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('wed4')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('wed4')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="wed5">
+	<!-- <form name="fwed2"> -->
+	<table bgcolor="lightblue"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('wed5')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('wed5')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="wed6">
+	<!-- <form name="fwed2"> -->
+	<table bgcolor="violet"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('wed6')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('wed6')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	
+	</td>
+	<td  id="wed7">
+	<!-- <form name="fwed2"> -->
+	<table bgcolor="red"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('wed7')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('wed7')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="wed8">
+	<!-- <form name="fwed2"> -->
+	<table bgcolor="orange"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('wed8')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('wed8')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	
+</tr>
+<tr>
+	<td>Thu</td>
+	<td  id="thu1">
+		<!-- <form name="fthu1"> -->
+	<table bgcolor="yellow"><tr><td>
+	Lec. type:</td><td  >
+	<select name="tbtype" id="tbtype" onchange="sub('thu1')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('thu1')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+		</td>
+
+	<td  id="thu2">
+	<!-- <form name="fthu2"> -->
+	<table bgcolor="lightgreen"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('thu2')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('thu2')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+		</td>
+	<td  id="thu3">
+	<!-- <form name="fthu2"> -->
+	<table bgcolor="lightblue"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('thu3')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('thu3')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	
+	<td  id="thu4">
+	<!-- <form name="fthu2"> -->
+	<table bgcolor="violet"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('thu4')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('thu4')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="thu5">
+	<!-- <form name="fthu2"> -->
+	<table bgcolor="red"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('thu5')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('thu5')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="thu6">
+	<!-- <form name="fthu2"> -->
+	<table bgcolor="orange"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('thu6')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('thu6')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	
+	</td>
+	<td  id="thu7">
+	<!-- <form name="fthu2"> -->
+	<table bgcolor="yellow"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('thu7')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('thu7')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="thu8">
+	<!-- <form name="fthu2"> -->
+	<table bgcolor="lightgreen"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('thu8')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('thu8')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	
+</tr>
+<tr>
+	<td>Fri</td>
+	<td  id="fri1">
+		<!-- <form name="ffri1"> -->
+	<table bgcolor="lightblue"><tr><td>
+	Lec. type:</td><td  >
+	<select name="tbtype" id="tbtype" onchange="sub('fri1')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('fri1')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+		</td>
+
+	<td  id="fri2">
+	<!-- <form name="ffri2"> -->
+	<table bgcolor="violet" ><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('fri2')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('fri2')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+		</td>
+	<td  id="fri3">
+	<!-- <form name="ffri2"> -->
+	<table bgcolor="red" ><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('fri3')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('fri3')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	
+	<td  id="fri4">
+	<!-- <form name="ffri2"> -->
+	<table bgcolor="orange" ><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('fri4')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('fri4')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="fri5">
+	<!-- <form name="ffri2"> -->
+	<table bgcolor="yellow"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('fri5')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('fri5')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="fri6">
+	<!-- <form name="ffri2"> -->
+	<table  bgcolor="lightgreen"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('fri6')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('fri6')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	
+	</td>
+	<td  id="fri7">
+	<!-- <form name="ffri2"> -->
+	<table bgcolor="lightblue"><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('fri7')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('fri7')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+	<td  id="fri8">
+	<!-- <form name="ffri2"> -->
+	<table bgcolor="violet" ><tr><td>
+	Lec. type:</td><td >
+	<select name="tbtype" id="tbtype"  onchange="sub('fri8')">
+	<option>.</option>
+	<option value="Theory">Theory</option>
+	<option value="Lab">Lab</option>
+	<option value="break">Break</option>  
+	</select>
+	</td></tr><tr><td>
+	Sub.:</td><td  id="tbcourse1">
+	<select name="tbcourse" id="tbcourse" onchange="fac('fri8')">
+	
+	</select>
+	</td></tr><tr><td>
+	Teacher:</td><td>
+	<select name="tbtname" id="tbtname">
+		
+	</select>
+	</td></tr><tr><td colspan="2">
+	<textarea name="tbdesc" id="tbdesc" placeholder="Enter Room no "></textarea>
+	</td></tr>
+	</table>
+	<!-- </form> -->
+	</td>
+
+</tr>
+
+
+</table>
+</center></form>
+<script src="eg_js.js"></script>
+</body>
+</html>
+
